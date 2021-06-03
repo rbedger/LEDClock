@@ -20,7 +20,7 @@ void Ntp::connect() {
 
 time_t Ntp::getLocalTime()
 {
-	return time_t();
+    return localTime;
 }
 
 void Ntp::handleTime() {
