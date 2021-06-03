@@ -12,28 +12,28 @@ void Clock::handle(CRGB* leds) {
     _font.useFullWhiteInsteadOfPalette(_brightness.saturated());
 
     time_t now = _ntp.getLocalTime();
-    int d = day(now);
-    int h = hour(now);
-    int m = minute(now);
+    int dayNow = day(now);
+    int hourNow = hour(now);
+    int minuteNow = minute(now);
 
-    if (_prev_h != h || _prev_m != m) {
-        uint16_t prev_time_offset = 60 * _prev_h + _prev_m;
-        _font.drawDigit(_leds_previous, _prev_h / 10, 2, prev_time_offset);
-        _font.drawDigit(_leds_previous, _prev_h - (_prev_h / 10) * 10, 6, prev_time_offset);
+    if (_prev_hour != hourNow || _prev_minute != minuteNow) {
+        uint16_t prev_time_offset = 60 * _prev_hour + _prev_minute;
+        _font.drawDigit(_leds_previous, _prev_hour / 10, 2, prev_time_offset);
+        _font.drawDigit(_leds_previous, _prev_hour - (_prev_hour / 10) * 10, 6, prev_time_offset);
         _font.drawSeparator(_leds_previous, 10, prev_time_offset);
-        _font.drawDigit(_leds_previous, _prev_m / 10, 12, prev_time_offset);
-        _font.drawDigit(_leds_previous, _prev_m - (_prev_m / 10) * 10, 16, prev_time_offset);
+        _font.drawDigit(_leds_previous, _prev_minute / 10, 12, prev_time_offset);
+        _font.drawDigit(_leds_previous, _prev_minute - (_prev_minute / 10) * 10, 16, prev_time_offset);
 
-        uint16_t time_offset = 60 * h + m;
-        _font.drawDigit(_leds_new, h / 10, 2, time_offset);
-        _font.drawDigit(_leds_new, h - (h / 10) * 10, 6, time_offset);
+        uint16_t time_offset = 60 * hourNow + minuteNow;
+        _font.drawDigit(_leds_new, hourNow / 10, 2, time_offset);
+        _font.drawDigit(_leds_new, hourNow - (hourNow / 10) * 10, 6, time_offset);
         _font.drawSeparator(_leds_new, 10, time_offset);
-        _font.drawDigit(_leds_new, m / 10, 12, time_offset);
-        _font.drawDigit(_leds_new, m - (m / 10) * 10, 16, time_offset);
+        _font.drawDigit(_leds_new, minuteNow / 10, 12, time_offset);
+        _font.drawDigit(_leds_new, minuteNow - (minuteNow / 10) * 10, 16, time_offset);
         _fade = millis() + 5000;
     }
-    _prev_h = h;
-    _prev_m = m;
+    _prev_hour = hourNow;
+    _prev_minute = minuteNow;
 
     for (int i = 0; i < _num_leds; i++) {
         uint8_t amount = 255 - ((_fade - millis()) / 5000.0) * 255;

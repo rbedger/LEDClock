@@ -19,9 +19,9 @@ class Clock {
 
 	private:
 	  uint16_t _num_leds;
-	  int8_t _prev_d = 0;
-	  int8_t _prev_h = 0;
-	  int8_t _prev_m = 0;
+	  int8_t _prev_day = 0;
+	  int8_t _prev_hour = 0;
+	  int8_t _prev_minute = 0;
 	  unsigned long _fade = 0;
 	  CRGB *_leds_previous;
 	  CRGB *_leds_new;
