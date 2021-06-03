@@ -7,7 +7,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 
-#define DATA_PIN D3
+#define DATA_PIN D4
 #define LED_TYPE WS2812B
 #define COLOR_ORDER GRB
 #define DEFAULT_BRIGHTNESS 255
