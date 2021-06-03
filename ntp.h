@@ -1,13 +1,9 @@
 #ifndef __NTP_H__
 #define __NTP_H__
 
-#include "arduino.h"
 #include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
 #include <WiFiUdp.h>
 #include <TimeLib.h>
-#include <Timezone.h>           // http://github.com/JChristensen/Timezone
-#include <Streaming.h>
 #include "Toki.h"
 
 #define NTP_SYNC_INTERVAL 42000UL //Get fresh NTP time about twice per day

@@ -1,5 +1,6 @@
 #include "prog.h"
 #include "ntp.h"
+#include <Timezone.h>
 
 const char* ntpServerName = "0.us.pool.ntp.org";
 Toki toki = Toki();
