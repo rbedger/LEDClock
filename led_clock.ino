@@ -28,20 +28,26 @@ CRGB _leds[NUM_LEDS];
 void setup()
 {
 	Serial.begin(115200);
+#ifdef DEBUG
 	Serial.println("Booting");
+#endif
 
 	WiFi.hostname("esp-clock");
 	WiFi.mode(WIFI_STA);
 	WiFi.begin("SSID", "Password");
 	while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+#ifdef DEBUG
 		Serial.println("Connection failed! Rebooting");
+#endif
 		delay(5000);
 		ESP.restart();
 	}
 
+#ifdef DEBUG
 	Serial.println("Ready");
 	Serial.print("IP address: ");
 	Serial.println(WiFi.localIP());
+#endif
 
 	_ntp.connect();
 
@@ -52,6 +58,7 @@ void setup()
 
 	FastLED.clear(true);
 }
+
 
 void loop()
 {
@@ -68,6 +75,7 @@ void loop()
 	_clock.handle(_leds);
 
 	FastLED.show();
+
 
 #ifdef DEBUG
     delay(1000);
