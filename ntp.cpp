@@ -7,10 +7,11 @@ Toki toki = Toki();
 IPAddress ntpServerIP;
 time_t localTime;
 unsigned long ntpPacketSentTime = 999000000L;
-Timezone* centralTimezone = new Timezone(
-	{Second, Sun, Mar, 2, -300},
-	{First, Sun, Nov, 2, -360}
-);
+
+TimeChangeRule daylight = {"CDT", Second, Sun, Mar, 2, -300 };
+TimeChangeRule standard = {"CST", First, Sun, Nov, 2, -360 };
+
+Timezone* centralTimezone = new Timezone(daylight, standard);
 
 WiFiUDP ntpUdp;
 
@@ -20,7 +21,15 @@ void Ntp::connect() {
 
 time_t Ntp::getLocalTime()
 {
-    return localTime;
+    TimeChangeRule* tcr;
+    time_t local = centralTimezone->toLocal(toki.second(), &tcr);
+
+#ifdef DEBUG
+    Serial.print("Timezone Abbrev: ");
+    Serial.println(tcr->abbrev);
+#endif
+
+    return local;
 }
 
 void Ntp::handleTime() {
@@ -64,7 +73,9 @@ void Ntp::sendNTPPacket()
     WiFi.hostByName(ntpServerName, ntpServerIP, 750);
   }
 
-  DEBUG_PRINTLN(F("send NTP"));
+#if DEBUG
+  Serial.println("send NTP");
+#endif
   byte pbuf[NTP_PACKET_SIZE];
   memset(pbuf, 0, NTP_PACKET_SIZE);
 
@@ -89,8 +100,10 @@ bool Ntp::checkNTPResponse()
   if (!cb) return false;
 
   uint32_t ntpPacketReceivedTime = millis();
-  DEBUG_PRINT(F("NTP recv, l="));
-  DEBUG_PRINTLN(cb);
+#if DEBUG
+  Serial.print("NTP recv, 1=");
+  Serial.println(cb);
+#endif
   byte pbuf[NTP_PACKET_SIZE];
   ntpUdp.read(pbuf, NTP_PACKET_SIZE); // read the packet into the buffer
 

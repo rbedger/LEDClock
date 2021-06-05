@@ -20,7 +20,7 @@ class Brightness {
 		unsigned int readAdc();
 
 	private:
-		uint8_t _brightness;
+		uint8_t _brightness = 100;
 		unsigned int _latest_adc;
 };
 

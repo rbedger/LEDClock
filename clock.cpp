@@ -1,20 +1,36 @@
 #include "clock.h"
 #include "font.h"
 #include "ledutils.h"
+#include "prog.h"
 
 Clock::Clock(uint16_t num_leds, Ntp& ntp, Ledutils& ledutils, Brightness& brightness)
-    : _num_leds(num_leds), _leds_previous((CRGB*)malloc(sizeof(CRGB)* _num_leds)),
-    _leds_new((CRGB*)malloc(sizeof(CRGB)* _num_leds)), _ntp(ntp), _font(Font(RainbowColors_p, ledutils)),
-    _brightness(brightness) {}
+    :   _num_leds(num_leds),
+		_leds_previous((CRGB*)malloc(sizeof(CRGB)* _num_leds)),
+		_leds_new((CRGB*)malloc(sizeof(CRGB)* _num_leds)),
+		_ntp(ntp),
+		_font(Font(RainbowColors_p, ledutils)),
+		_brightness(brightness)
+{}
 
 void Clock::handle(CRGB* leds) {
     _font.setBrightness(_brightness.getBrightness());
     _font.useFullWhiteInsteadOfPalette(_brightness.saturated());
 
     time_t now = _ntp.getLocalTime();
-    int dayNow = day(now);
+
     int hourNow = hour(now);
     int minuteNow = minute(now);
+
+#ifdef DEBUG_CLOCK
+    Serial.print("Now: ");
+    Serial.println(now);
+
+    Serial.print("Hour: ");
+    Serial.println(hourNow);
+
+    Serial.print("Minute: ");
+    Serial.println(minuteNow);
+#endif
 
     if (_prev_hour != hourNow || _prev_minute != minuteNow) {
         uint16_t prev_time_offset = 60 * _prev_hour + _prev_minute;

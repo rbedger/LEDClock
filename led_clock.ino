@@ -1,3 +1,4 @@
+#define FASTLED_ALLOW_INTERRUPTS 0
 #include "FastLED.h"
 #include "brightness.h"
 #include "clock.h"
@@ -7,9 +8,9 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 
-#define DATA_PIN D4
+#define DATA_PIN D3
 #define LED_TYPE WS2812B
-#define COLOR_ORDER GRB
+#define COLOR_ORDER RGB
 #define DEFAULT_BRIGHTNESS 255
 
 const uint8_t MatrixWidth = 21;
@@ -47,6 +48,8 @@ void setup()
 		.setCorrection(TypicalLEDStrip)
 		.setDither(false);
 	FastLED.setBrightness(DEFAULT_BRIGHTNESS);
+
+	FastLED.clear(true);
 }
 
 void loop()
@@ -63,5 +66,9 @@ void loop()
 
 	_clock.handle(_leds);
 
+	FastLED.show();
+
+#ifdef DEBUG
     delay(1000);
+#endif
 }
