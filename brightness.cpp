@@ -1,4 +1,5 @@
 #include "brightness.h"
+#include "prog.h"
 
 /**
  * y=kx+m
@@ -14,7 +15,12 @@ const double m_value = 30 - 30 * k_value;
 unsigned int Brightness::readAdc() {
     int val = 0;
     for (uint8_t i = 0; i < 5; i++) {
-        val += analogRead(A0);
+        int a0Val = analogRead(A0);
+        val += a0Val;
+
+        SERIAL_PRINT("A0 Value: ");
+        SERIAL_PRINTLN(a0Val);
+
         delayMicroseconds(100);
     }
     return val / 5;

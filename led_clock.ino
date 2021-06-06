@@ -28,26 +28,21 @@ CRGB _leds[NUM_LEDS];
 void setup()
 {
 	Serial.begin(115200);
-#ifdef DEBUG
-	Serial.println("Booting");
-#endif
+
+	SERIAL_PRINTLN("Booting");
 
 	WiFi.hostname("esp-clock");
 	WiFi.mode(WIFI_STA);
 	WiFi.begin("SSID", "Password");
 	while (WiFi.waitForConnectResult() != WL_CONNECTED) {
-#ifdef DEBUG
-		Serial.println("Connection failed! Rebooting");
-#endif
+		SERIAL_PRINTLN("Connection failed! Rebooting");
 		delay(5000);
 		ESP.restart();
 	}
 
-#ifdef DEBUG
-	Serial.println("Ready");
-	Serial.print("IP address: ");
-	Serial.println(WiFi.localIP());
-#endif
+	SERIAL_PRINTLN("Ready");
+	SERIAL_PRINT("IP address: ");
+	SERIAL_PRINTLN(WiFi.localIP());
 
 	_ntp.connect();
 
@@ -69,18 +64,16 @@ void loop()
 {
 	_ntp.handleTime();
 
-#ifdef DEBUG
-	Serial.print("Wifi state: ");
-	Serial.println(WiFi.status());
-
-	Serial.print("NTP last sync: ");
-	Serial.println(_ntp.ntpLastSyncTime);
-#endif
-
+	_brightness.handle();
 	_clock.handle(_leds);
 
 	FastLED.show();
 
+	SERIAL_PRINT("Wifi state: ");
+	SERIAL_PRINTLN(WiFi.status());
+
+	SERIAL_PRINT("NTP last sync: ");
+	SERIAL_PRINTLN(_ntp.ntpLastSyncTime);
 
 #ifdef DEBUG
     delay(1000);

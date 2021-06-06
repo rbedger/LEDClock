@@ -26,26 +26,14 @@ void Clock::handle(CRGB* leds) {
     int hourNow = hour(now);
     int minuteNow = minute(now);
 
-#ifdef DEBUG_CLOCK
-    Serial.print("Now: ");
-    Serial.println(now);
+    SERIAL_PRINT("Now: ");
+    SERIAL_PRINTLN(now);
 
-    Serial.print("Hour: ");
-    Serial.println(hourNow);
+    SERIAL_PRINT("Hour: ");
+    SERIAL_PRINTLN(hourNow);
 
-    Serial.print("Minute: ");
-    Serial.println(minuteNow);
-#endif
-    //if (_prev_hour != hourNow || _prev_minute != minuteNow) {
-    //    _font.drawDigit(leds, hourNow / 10, 2, 0);
-    //    _font.drawDigit(leds, hourNow - (hourNow / 10) * 10, 6, 0);
-    //    _font.drawSeparator(leds, 10, 0);
-    //    _font.drawDigit(leds, minuteNow / 10, 12, 0);
-    //    _font.drawDigit(leds, minuteNow - (minuteNow / 10) * 10, 16, 0);
-    //}
-
-    //_prev_hour = hourNow;
-    //_prev_minute = minuteNow;
+    SERIAL_PRINT("Minute: ");
+    SERIAL_PRINTLN(minuteNow);
 
     if (_prev_hour != hourNow || _prev_minute != minuteNow) {
         fill_solid(_leds_previous, _num_leds, CRGB::Black);

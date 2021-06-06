@@ -36,11 +36,10 @@ void Ntp::handleTime() {
 
   if (toki.isTick()) //true only in the first loop after a new second started
   {
-    #ifdef DEBUG
-    Serial.print(F("TICK! "));
+    SERIAL_PRINT(F("TICK! "));
+#ifdef DEBUG
     toki.printTime(toki.getTime());
-
-    #endif
+#endif
 
     updateLocalTime();
   }
@@ -69,9 +68,7 @@ void Ntp::sendNTPPacket()
     WiFi.hostByName(ntpServerName, ntpServerIP, 750);
   }
 
-#if DEBUG
-  Serial.println("send NTP");
-#endif
+  SERIAL_PRINTLN("send NTP");
   byte pbuf[NTP_PACKET_SIZE];
   memset(pbuf, 0, NTP_PACKET_SIZE);
 
@@ -96,10 +93,10 @@ bool Ntp::checkNTPResponse()
   if (!cb) return false;
 
   uint32_t ntpPacketReceivedTime = millis();
-#if DEBUG
-  Serial.print("NTP recv, 1=");
-  Serial.println(cb);
-#endif
+
+  SERIAL_PRINT("NTP recv, 1=");
+  SERIAL_PRINTLN(cb);
+
   byte pbuf[NTP_PACKET_SIZE];
   ntpUdp.read(pbuf, NTP_PACKET_SIZE); // read the packet into the buffer
 
@@ -118,16 +115,16 @@ bool Ntp::checkNTPResponse()
   toki.setTime(departed, TOKI_TS_NTP);
 
   #ifdef DEBUG
-  Serial.print("Arrived: ");
+  SERIAL_PRINT("Arrived: ");
   toki.printTime(arrived);
-  Serial.print("Time: ");
+  SERIAL_PRINT("Time: ");
   toki.printTime(departed);
-  Serial.print("Roundtrip: ");
-  Serial.println(ntpPacketReceivedTime - ntpPacketSentTime);
-  Serial.print("Offset: ");
-  Serial.println(offset);
-  Serial.print("Serverdelay: ");
-  Serial.println(serverDelay);
+  SERIAL_PRINT("Roundtrip: ");
+  SERIAL_PRINTLN(ntpPacketReceivedTime - ntpPacketSentTime);
+  SERIAL_PRINT("Offset: ");
+  SERIAL_PRINTLN(offset);
+  SERIAL_PRINT("Serverdelay: ");
+  SERIAL_PRINTLN(serverDelay);
   #endif
 
   updateLocalTime();
