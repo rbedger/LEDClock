@@ -8,11 +8,9 @@
 class Modekeeper {
 public:
     enum class Mode {
-        SNAKE,
         CLOCK,
-        RAINBOW,
-        BRIGHTNESS,
         SINGLECOLOR,
+        NOISE,
     };
 
     enum class Event {

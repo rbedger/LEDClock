@@ -1,24 +1,17 @@
-#include "modekeeper.h"
-#include "remote.h"
 #define FASTLED_ALLOW_INTERRUPTS 0
 
-#include "FastLED.h"
+#include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
+
+#include <FastLED.h>
+#include "noise.h"
+#include "modekeeper.h"
+#include "remote.h"
 #include "brightness.h"
 #include "clock.h"
 #include "ledutils.h"
 #include "ntp.h"
 #include "prog.h"
-#include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
-
-#define DATA_PIN D3
-#define LED_TYPE WS2812B
-#define COLOR_ORDER RGB
-#define DEFAULT_BRIGHTNESS 255
-
-const uint8_t MatrixWidth = 21;
-const uint8_t MatrixHeight = 5;
-#define NUM_LEDS (MatrixWidth * MatrixHeight)
 
 Ntp _ntp;
 Ledutils _ledutils(MatrixWidth, MatrixHeight);
@@ -26,6 +19,7 @@ Brightness _brightness;
 Clock _clock(NUM_LEDS, _ntp, _ledutils, _brightness);
 Modekeeper _modekeeper(Modekeeper::Mode::CLOCK);
 Remote _remote(_modekeeper);
+Noise _noise(_ledutils);
 
 CRGB _leds[NUM_LEDS];
 
@@ -75,8 +69,20 @@ void loop()
 	_ntp.handleTime();
 
 	_brightness.handle();
-	_clock.handle(_leds);
 	_remote.handle();
+
+	switch (_modekeeper.getMode())
+	{
+	case Modekeeper::Mode::CLOCK:
+		_clock.handle(_leds);
+		break;
+	case Modekeeper::Mode::SINGLECOLOR:
+		fill_solid(_leds, NUM_LEDS, CHSV(random8(), 255, 255));
+		break;
+	case Modekeeper::Mode::NOISE:
+		_noise.handle(_leds);
+		break;
+	}
 
 	FastLED.show();
 
@@ -87,6 +93,6 @@ void loop()
 	SERIAL_PRINTLN(_ntp.ntpLastSyncTime);
 
 #ifdef DEBUG
-    delay(1000);
+	delay(1000);
 #endif
 }

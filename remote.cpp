@@ -38,25 +38,13 @@ void Remote::handleData(int8_t c) {
     _modekeeper.stamp();
     switch (c) {
     case '1':
-        _modekeeper.setMode(Modekeeper::Mode::SNAKE);
-        break;
-    case '2':
         _modekeeper.setMode(Modekeeper::Mode::CLOCK);
         break;
-    case '3':
-        _modekeeper.setMode(Modekeeper::Mode::RAINBOW);
-        break;
-    case '4':
+    case '2':
         _modekeeper.setMode(Modekeeper::Mode::SINGLECOLOR);
         break;
-    case '5':
-        _modekeeper.setMode(Modekeeper::Mode::BRIGHTNESS);
-        break;
-    case 'a':
-        _modekeeper.emitEvent(Modekeeper::Event::LEFT);
-        break;
-    case 'd':
-        _modekeeper.emitEvent(Modekeeper::Event::RIGHT);
+    case '3':
+        _modekeeper.setMode(Modekeeper::Mode::NOISE);
         break;
     }
 }

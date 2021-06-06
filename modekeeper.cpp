@@ -7,9 +7,6 @@ void Modekeeper::setMode(Mode mode) {
         emitEvent(Modekeeper::Event::RESET);
     }
     _current_mode = mode;
-    if (mode == Mode::RAINBOW) {
-        _last_stamp = 0; // Rainbow has no timeout.
-    }
 }
 
 void Modekeeper::emitEvent(Event event) { _latest_event = event; }

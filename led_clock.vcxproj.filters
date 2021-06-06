@@ -51,6 +51,9 @@
     <ClInclude Include="modekeeper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="noise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ntp.cpp">
@@ -75,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="modekeeper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="noise.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
