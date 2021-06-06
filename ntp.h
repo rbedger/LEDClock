@@ -23,6 +23,7 @@ class Ntp {
 		void getTimeString(char*);
 		bool ntpConnected;
 		unsigned long ntpLastSyncTime = 999000000L;
+		bool isTimeSet();
 
 	private:
 		void handleNetworkTime();
@@ -30,5 +31,6 @@ class Ntp {
 		bool checkNTPResponse();
 		void updateLocalTime();
 		byte weekdayMondayFirst();
+		bool timeIsSet = false;
 };
 #endif // __NTP_H__

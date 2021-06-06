@@ -21,15 +21,11 @@ void Ntp::connect() {
 
 time_t Ntp::getLocalTime()
 {
-    TimeChangeRule* tcr;
-    time_t local = centralTimezone->toLocal(toki.second(), &tcr);
+    return localTime;
+}
 
-#ifdef DEBUG
-    Serial.print("Timezone Abbrev: ");
-    Serial.println(tcr->abbrev);
-#endif
-
-    return local;
+bool Ntp::isTimeSet() {
+    return timeIsSet;
 }
 
 void Ntp::handleTime() {
@@ -135,6 +131,7 @@ bool Ntp::checkNTPResponse()
   #endif
 
   updateLocalTime();
+  timeIsSet = true;
   return true;
 }
 

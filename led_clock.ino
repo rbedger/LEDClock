@@ -57,6 +57,11 @@ void setup()
 	FastLED.setBrightness(DEFAULT_BRIGHTNESS);
 
 	FastLED.clear(true);
+
+	CRGB* ptr = _leds;
+	ptr + 21 * 2;
+
+	fill_solid(ptr, 21, CRGB::SeaGreen);
 }
 
 

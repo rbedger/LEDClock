@@ -13,6 +13,11 @@ Clock::Clock(uint16_t num_leds, Ntp& ntp, Ledutils& ledutils, Brightness& bright
 {}
 
 void Clock::handle(CRGB* leds) {
+    // don't show anything until we have the time from NTP
+    if (!_ntp.isTimeSet()) {
+        return;
+    }
+
     _font.setBrightness(_brightness.getBrightness());
     _font.useFullWhiteInsteadOfPalette(_brightness.saturated());
 
