@@ -15,7 +15,7 @@ const uint8_t MatrixHeight = 5;
 #define MAX_DIMENSION ((MatrixWidth>MatrixHeight) ? MatrixWidth : MatrixHeight)
 #define NUM_LEDS (MatrixWidth * MatrixHeight)
 
-#define DEBUG
+// #define DEBUG
 
 #ifdef DEBUG
 	#define SERIAL_PRINT(x) Serial.print(x)

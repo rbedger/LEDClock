@@ -118,6 +118,7 @@
     <ClInclude Include="ntp.h" />
     <ClInclude Include="prog.h" />
     <ClInclude Include="remote.h" />
+    <ClInclude Include="singlecolor.h" />
     <ClInclude Include="Toki.h" />
     <ClInclude Include="__vm\.led_clock.vsarduino.h" />
   </ItemGroup>
@@ -131,6 +132,7 @@
     <ClCompile Include="ntp.cpp" />
     <ClCompile Include="prog.cpp" />
     <ClCompile Include="remote.cpp" />
+    <ClCompile Include="singlecolor.cpp" />
   </ItemGroup>
   <PropertyGroup>
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>

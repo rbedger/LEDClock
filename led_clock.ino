@@ -1,3 +1,4 @@
+#include "singlecolor.h"
 #define FASTLED_ALLOW_INTERRUPTS 0
 
 #include <ESP8266WiFi.h>
@@ -20,6 +21,7 @@ Clock _clock(NUM_LEDS, _ntp, _ledutils, _brightness);
 Modekeeper _modekeeper(Modekeeper::Mode::CLOCK);
 Remote _remote(_modekeeper);
 Noise _noise(_ledutils);
+SingleColor _singleColor;
 
 CRGB _leds[NUM_LEDS];
 
@@ -55,7 +57,7 @@ void setup()
 	FastLED.clear(true);
 
 	CRGB* ptr = _leds;
-	ptr + 21 * 2;
+	ptr = ptr + 21 * 2;
 
 	fill_solid(ptr, 21, CRGB::SeaGreen);
 	FastLED.show();
@@ -77,7 +79,7 @@ void loop()
 		_clock.handle(_leds);
 		break;
 	case Modekeeper::Mode::SINGLECOLOR:
-		fill_solid(_leds, NUM_LEDS, CHSV(random8(), 255, 255));
+		_singleColor.handle(_leds);
 		break;
 	case Modekeeper::Mode::NOISE:
 		_noise.handle(_leds);
