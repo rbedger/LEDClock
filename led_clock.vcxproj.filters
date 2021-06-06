@@ -16,6 +16,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="led_clock.ino" />
+    <None Include="data\index.htm">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.led_clock.vsarduino.h">
@@ -42,6 +45,12 @@
     <ClInclude Include="brightness.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="remote.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="modekeeper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ntp.cpp">
@@ -60,6 +69,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="brightness.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="remote.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="modekeeper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

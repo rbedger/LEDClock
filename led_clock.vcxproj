@@ -101,6 +101,9 @@
     <ProjectCapability Include="VisualMicro" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\index.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="led_clock.ino">
       <FileType>CppCode</FileType>
     </None>
@@ -110,8 +113,10 @@
     <ClInclude Include="clock.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="ledutils.h" />
+    <ClInclude Include="modekeeper.h" />
     <ClInclude Include="ntp.h" />
     <ClInclude Include="prog.h" />
+    <ClInclude Include="remote.h" />
     <ClInclude Include="Toki.h" />
     <ClInclude Include="__vm\.led_clock.vsarduino.h" />
   </ItemGroup>
@@ -120,8 +125,10 @@
     <ClCompile Include="clock.cpp" />
     <ClCompile Include="font.cpp" />
     <ClCompile Include="ledutils.cpp" />
+    <ClCompile Include="modekeeper.cpp" />
     <ClCompile Include="ntp.cpp" />
     <ClCompile Include="prog.cpp" />
+    <ClCompile Include="remote.cpp" />
   </ItemGroup>
   <PropertyGroup>
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
