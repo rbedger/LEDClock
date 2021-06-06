@@ -22,6 +22,7 @@ public:
 
     Modekeeper(Mode default_mode);
     void setMode(Mode mode);
+    void nextMode();
     void emitEvent(Event event);
     void stamp();
     Mode getMode();

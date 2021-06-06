@@ -6,6 +6,7 @@
 #define WLED_CONNECTED (WiFi.status() == WL_CONNECTED)
 
 #define DATA_PIN D3
+#define BUTTON_PIN D7
 #define LED_TYPE WS2812B
 #define COLOR_ORDER RGB
 #define DEFAULT_BRIGHTNESS 255

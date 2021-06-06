@@ -22,6 +22,12 @@ Modekeeper::Mode Modekeeper::getMode() {
     return _current_mode;
 }
 
+void Modekeeper::nextMode() {
+    int nextModeInt = ((int)_current_mode) + 1;
+    nextModeInt %= 3;
+    _current_mode = (Mode)nextModeInt;
+}
+
 Modekeeper::Event Modekeeper::getEvent() {
     auto event = _latest_event;
     _latest_event = Modekeeper::Event::NONE;

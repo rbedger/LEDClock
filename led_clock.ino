@@ -68,6 +68,9 @@ void setup()
 
 void loop()
 {
+	if (digitalRead(BUTTON_PIN) == HIGH) {
+		_modekeeper.nextMode();
+	}
 	_ntp.handleTime();
 
 	_brightness.handle();
