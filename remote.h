@@ -24,9 +24,6 @@ private:
 	bool handleFileRead(String path);
 
 private:
-	WiFiServer _telnet_server;
-	WiFiClient _telnet_client;
-
 	WebsocketsServer _ws_server;
 	std::vector<WebsocketsClient> _ws_clients;
 
@@ -36,14 +33,6 @@ private:
 	unsigned long _retry_to_connect_at_ms = 0;
 
 	Modekeeper& _modekeeper;
-
-	Modekeeper::Mode _last_known_mode;
-	uint8_t _last_known_brightness;
-	unsigned long _last_publish_ms;
-
-	String _host;
-	String _username;
-	String _password;
 };
 
 #endif //__REMOTE_H__

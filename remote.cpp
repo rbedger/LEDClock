@@ -1,18 +1,12 @@
 #include "remote.h"
-#include <FS.h>
-
-#define FORCE_PUBLISH_INTERVAL_MS 30000
-
 Remote::Remote(
 		Modekeeper& modekeeper)
-    :   _telnet_server(23),
-		_web_server(80),
+    :   _web_server(80),
 		_modekeeper(modekeeper)
 {
 }
 
 void Remote::setup() {
-    _telnet_server.begin();
     _ws_server.listen(8080);
 
     SPIFFS.begin();
@@ -79,21 +73,6 @@ void Remote::pollAllWsClients() {
 }
 
 void Remote::handle() {
-    // Normal TCP socket
-    if (_telnet_client && _telnet_client.connected()) {
-        if (_telnet_client.available() > 0) {
-            int8_t c = _telnet_client.read();
-            Serial.println(String(c));
-            handleData(c);
-        }
-    }
-    else {
-        _telnet_client = _telnet_server.available();
-        if (_telnet_client) {
-            _telnet_client.setTimeout(5000); // default is 1000
-        }
-    }
-
     // Websocket
     if (_ws_server.poll()) {
         auto ws_client = _ws_server.accept();

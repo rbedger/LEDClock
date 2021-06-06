@@ -24,6 +24,8 @@ Ntp _ntp;
 Ledutils _ledutils(MatrixWidth, MatrixHeight);
 Brightness _brightness;
 Clock _clock(NUM_LEDS, _ntp, _ledutils, _brightness);
+Modekeeper _modekeeper(Modekeeper::Mode::CLOCK);
+Remote _remote(_modekeeper);
 
 CRGB _leds[NUM_LEDS];
 
@@ -33,8 +35,9 @@ void setup()
 
 	SERIAL_PRINTLN("Booting");
 
-	WiFi.hostname("esp-clock");
 	WiFi.mode(WIFI_STA);
+
+	WiFi.hostname("LEDClock");
 	WiFi.begin("SSID", "Password");
 	while (WiFi.waitForConnectResult() != WL_CONNECTED) {
 		SERIAL_PRINTLN("Connection failed! Rebooting");
@@ -43,10 +46,12 @@ void setup()
 	}
 
 	SERIAL_PRINTLN("Ready");
-	SERIAL_PRINT("IP address: ");
-	SERIAL_PRINTLN(WiFi.localIP());
+
+	Serial.print("IP address: ");
+	Serial.println(WiFi.localIP());
 
 	_ntp.connect();
+	_remote.setup();
 
 	FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(_leds, NUM_LEDS)
 		.setCorrection(TypicalLEDStrip)
@@ -59,6 +64,9 @@ void setup()
 	ptr + 21 * 2;
 
 	fill_solid(ptr, 21, CRGB::SeaGreen);
+	FastLED.show();
+
+	delay(2000);
 }
 
 
@@ -68,6 +76,7 @@ void loop()
 
 	_brightness.handle();
 	_clock.handle(_leds);
+	_remote.handle();
 
 	FastLED.show();
 
