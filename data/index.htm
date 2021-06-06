@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="data:," />
     <style>
-      html {
-        font-family: Helvetica;
-        display: inline-block;
-        margin: 0px auto;
-        text-align: center;
-      }
-      .button {
-        background-color: #4caf50;
-        border: none;
-        color: white;
-        padding: 16px 20px;
-        text-decoration: none;
-        font-size: 20px;
-        margin: 2px;
-        cursor: pointer;
-      }
-      .direction {
-        background-color: #555555;
-        padding: 16px 40px;
-        font-size: 30px;
-      }
+        html {
+            font-family: Helvetica;
+            display: inline-block;
+            margin: 0px auto;
+            text-align: center;
+        }
+
+        .button {
+            background-color: #4caf50;
+            border: none;
+            color: white;
+            padding: 16px 20px;
+            text-decoration: none;
+            font-size: 20px;
+            margin: 2px;
+            cursor: pointer;
+        }
+
+        .direction {
+            background-color: #555555;
+            padding: 16px 40px;
+            font-size: 30px;
+        }
     </style>
     <script>
       var connection = new WebSocket("ws://" + location.hostname + ":8080/", []);
@@ -46,15 +48,15 @@
       }
     </script>
     <title>Clock</title>
-  </head>
-  <body>
+</head>
+<body>
     <button class="button" onclick="send('1')">Snake</button>
     <button class="button" onclick="send('2')">Clock</button>
     <button class="button" onclick="send('3')">Rainbow</button>
     <button class="button" onclick="send('4')">Single color</button>
     <button class="button" onclick="send('5')">Brightness</button>
-  </br>
-  </br></br>
+    </br>
+    </br></br>
     <button class="button direction" onclick="send('a')">R left</button><button class="button direction" onclick="send('d')">R right</button></br>
-  </body>
+</body>
 </html>
