@@ -24,6 +24,7 @@ Noise _noise(_ledutils);
 SingleColor _singleColor;
 
 CRGB _leds[NUM_LEDS];
+int _last_button_state = LOW;
 
 void setup()
 {
@@ -68,9 +69,12 @@ void setup()
 
 void loop()
 {
-	if (digitalRead(BUTTON_PIN) == HIGH) {
+	int currentButtonState = digitalRead(BUTTON_PIN);
+	if (currentButtonState == HIGH && _last_button_state == LOW) {
 		_modekeeper.nextMode();
 	}
+	_last_button_state = currentButtonState;
+
 	_ntp.handleTime();
 
 	_brightness.handle();
