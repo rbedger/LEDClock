@@ -2,7 +2,11 @@
 #include "noise.h"
 
 
-Noise::Noise(Ledutils& ledutils) : _ledutils(ledutils)
+Noise::Noise(
+    Ledutils& ledutils,
+    Brightness& brightness)
+    :   _ledutils(ledutils),
+        _brightness(brightness)
 {
     // Initialize our coordinates to some random values
     _x = random16();

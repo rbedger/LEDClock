@@ -22,9 +22,9 @@ Brightness _brightness;
 Clock _clock(NUM_LEDS, _ntp, _ledutils, _brightness);
 Modekeeper _modekeeper(Modekeeper::Mode::CLOCK);
 Remote _remote(_modekeeper);
-Noise _noise(_ledutils);
-SingleColor _singleColor;
-Swirl _swirl(_ledutils);
+Noise _noise(_ledutils, _brightness);
+SingleColor _singleColor(_brightness);
+Swirl _swirl(_ledutils, _brightness);
 
 CRGB _leds[NUM_LEDS];
 int _last_button_state = LOW;

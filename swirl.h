@@ -5,6 +5,7 @@
 
 #include <FastLED.h>
 #include "ledutils.h"
+#include "brightness.h"
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "arduino.h"
@@ -14,11 +15,14 @@
 
 class Swirl {
 public:
-	Swirl(Ledutils& ledutils);
+	Swirl(
+		Ledutils& ledutils,
+		Brightness& brightness);
 	void handle(CRGB* leds);
 
 private:
 	Ledutils _ledutils;
+	Brightness _brightness;
 	unsigned long _lastExecutionTime;
 	int _count;
 	int _indices[105] = {

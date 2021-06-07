@@ -6,6 +6,7 @@
 #include <FastLED.h>
 #include "ledutils.h"
 #include "prog.h"
+#include "brightness.h"
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "arduino.h"
@@ -15,11 +16,14 @@
 
 class Noise {
 public:
-	Noise(Ledutils &ledutils);
+	Noise(
+		Ledutils &ledutils,
+		Brightness &brightness);
 	void handle(CRGB* leds);
 
 private:
 	Ledutils _ledutils;
+	Brightness _brightness;
 	// The 32bit version of our coordinates
 	uint16_t _x;
 	uint16_t _y;

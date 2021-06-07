@@ -2,8 +2,12 @@
 #include "swirl.h"
 #include <math.h>
 
-Swirl::Swirl(Ledutils& ledutils)
-: _ledutils(ledutils){
+Swirl::Swirl(
+	Ledutils& ledutils,
+	Brightness& brightness)
+:	_ledutils(ledutils),
+	_brightness(brightness)
+{
 	int centerX = round(MatrixWidth / 2.0);
 	int centerY = round(MatrixHeight / 2.0);
 
@@ -14,7 +18,7 @@ Swirl::Swirl(Ledutils& ledutils)
 void Swirl::handle(CRGB* leds)
 {
 	if (millis() - _lastExecutionTime > 100) {
-		leds[*_current] = CHSV(random8(), 255, 255);
+		leds[*_current] = CHSV(random8(), 255, _brightness.getBrightness());
 		if (++_count > NUM_LEDS) {
 			_count = 1;
 			_current = _indices;
