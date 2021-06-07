@@ -24,7 +24,7 @@ Modekeeper::Mode Modekeeper::getMode() {
 
 void Modekeeper::nextMode() {
     int nextModeInt = ((int)_current_mode) + 1;
-    nextModeInt %= 3;
+    nextModeInt %= 4;
     _current_mode = (Mode)nextModeInt;
 }
 

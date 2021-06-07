@@ -14,6 +14,7 @@
 #include "ntp.h"
 #include "singlecolor.h"
 #include "wifi_config.h"
+#include "swirl.h"
 
 Ntp _ntp;
 Ledutils _ledutils(MatrixWidth, MatrixHeight);
@@ -23,6 +24,7 @@ Modekeeper _modekeeper(Modekeeper::Mode::CLOCK);
 Remote _remote(_modekeeper);
 Noise _noise(_ledutils);
 SingleColor _singleColor;
+Swirl _swirl(_ledutils);
 
 CRGB _leds[NUM_LEDS];
 int _last_button_state = LOW;
@@ -91,6 +93,9 @@ void loop()
 		break;
 	case Modekeeper::Mode::NOISE:
 		_noise.handle(_leds);
+		break;
+	case Modekeeper::Mode::SWIRL:
+		_swirl.handle(_leds);
 		break;
 	}
 

@@ -60,6 +60,9 @@
     <ClInclude Include="wifi_config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="swirl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ntp.cpp">
@@ -90,6 +93,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="singlecolor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="swirl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,6 +11,7 @@ public:
         CLOCK,
         SINGLECOLOR,
         NOISE,
+        SWIRL,
     };
 
     enum class Event {
