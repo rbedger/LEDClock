@@ -83,6 +83,12 @@ void loop()
 	_brightness.handle();
 	_remote.handle();
 
+	int currentHour = hour(_ntp.getLocalTime());
+	if (currentHour > 22 || currentHour < 8) {
+		FastLED.clear(true);
+		return;
+	}
+
 	switch (_modekeeper.getMode())
 	{
 	case Modekeeper::Mode::CLOCK:
