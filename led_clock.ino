@@ -1,10 +1,10 @@
-#include "singlecolor.h"
 #define FASTLED_ALLOW_INTERRUPTS 0
 
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
-
 #include <FastLED.h>
+
+#include "prog.h"
 #include "noise.h"
 #include "modekeeper.h"
 #include "remote.h"
@@ -12,7 +12,8 @@
 #include "clock.h"
 #include "ledutils.h"
 #include "ntp.h"
-#include "prog.h"
+#include "singlecolor.h"
+#include "wifi_config.h"
 
 Ntp _ntp;
 Ledutils _ledutils(MatrixWidth, MatrixHeight);
@@ -35,7 +36,7 @@ void setup()
 	WiFi.mode(WIFI_STA);
 
 	WiFi.hostname("LEDClock");
-	WiFi.begin("SSID", "Password");
+	WiFi.begin(WiFiSSID, WiFiPassword);
 	while (WiFi.waitForConnectResult() != WL_CONNECTED) {
 		SERIAL_PRINTLN("Connection failed! Rebooting");
 		delay(5000);
