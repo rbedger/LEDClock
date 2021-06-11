@@ -14,25 +14,15 @@ public:
         SWIRL,
     };
 
-    enum class Event {
-        NONE,
-        LEFT,
-        RIGHT,
-        RESET,
-    };
-
     Modekeeper(Mode default_mode);
     void setMode(Mode mode);
     void nextMode();
-    void emitEvent(Event event);
     void stamp();
     Mode getMode();
-    Event getEvent();
 
 private:
     Mode _default_mode;
     Mode _current_mode;
-    Event _latest_event;
     unsigned long _last_stamp = 0;
 };
 

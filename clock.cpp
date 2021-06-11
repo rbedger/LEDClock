@@ -1,26 +1,15 @@
 #include "clock.h"
 #include "font.h"
-#include "ledutils.h"
 #include "prog.h"
 
-Clock::Clock(uint16_t num_leds, Ntp& ntp, Ledutils& ledutils, Brightness& brightness)
-    :   _num_leds(num_leds),
-		_leds_previous((CRGB*)malloc(sizeof(CRGB)* _num_leds)),
-		_leds_new((CRGB*)malloc(sizeof(CRGB)* _num_leds)),
+Clock::Clock(Ntp& ntp, Font& font)
+    :   _leds_previous((CRGB*)malloc(sizeof(CRGB)* NUM_LEDS)),
+		_leds_new((CRGB*)malloc(sizeof(CRGB)* NUM_LEDS)),
 		_ntp(ntp),
-		_font(Font(RainbowColors_p, ledutils)),
-		_brightness(brightness)
+		_font(font)
 {}
 
 void Clock::handle(CRGB* leds) {
-    // don't show anything until we have the time from NTP
-    if (!_ntp.isTimeSet()) {
-        return;
-    }
-
-    _font.setBrightness(_brightness.getBrightness());
-    _font.useFullWhiteInsteadOfPalette(_brightness.saturated());
-
     time_t now = _ntp.getLocalTime();
 
     int hourNow = hour(now);
@@ -29,50 +18,56 @@ void Clock::handle(CRGB* leds) {
     SERIAL_PRINT("Now: ");
     SERIAL_PRINTLN(now);
 
-    SERIAL_PRINT("Hour: ");
-    SERIAL_PRINTLN(hourNow);
-
-    SERIAL_PRINT("Minute: ");
-    SERIAL_PRINTLN(minuteNow);
-
     if (_prev_hour != hourNow || _prev_minute != minuteNow) {
-        fill_solid(_leds_previous, _num_leds, CRGB::Black);
-        uint16_t prev_time_offset = 60 * _prev_hour + _prev_minute;
-        _font.drawDigit(_leds_previous, _prev_hour / 10, 2, prev_time_offset);
-        _font.drawDigit(_leds_previous, _prev_hour - (_prev_hour / 10) * 10, 6, prev_time_offset);
-        _font.drawSeparator(_leds_previous, 10, prev_time_offset);
-        _font.drawDigit(_leds_previous, _prev_minute / 10, 12, prev_time_offset);
-        _font.drawDigit(_leds_previous, _prev_minute - (_prev_minute / 10) * 10, 16, prev_time_offset);
+        // if recovering from a crash, we don't want to fade from "00:00"
+        if (_prev_hour == 0) {
+			drawTime(_leds_previous, hourNow, minuteNow);
+        }
+        else {
+			drawTime(_leds_previous, _prev_hour, _prev_minute);
+        }
 
-        fill_solid(_leds_new, _num_leds, CRGB::Black);
-        uint16_t time_offset = 60 * hourNow + minuteNow;
-        _font.drawDigit(_leds_new, hourNow / 10, 2, time_offset);
-        _font.drawDigit(_leds_new, hourNow - (hourNow / 10) * 10, 6, time_offset);
-        _font.drawSeparator(_leds_new, 10, time_offset);
-        _font.drawDigit(_leds_new, minuteNow / 10, 12, time_offset);
-        _font.drawDigit(_leds_new, minuteNow - (minuteNow / 10) * 10, 16, time_offset);
+        drawTime(_leds_new, hourNow, minuteNow);
 
         _fade = millis() + 5000;
     }
+
     _prev_hour = hourNow;
     _prev_minute = minuteNow;
 
-    for (int i = 0; i < _num_leds; i++) {
-        uint8_t amount = 255 - ((_fade - millis()) / 5000.0) * 255;
-        if (_fade == 0 || millis() > _fade) {
-            amount = 255;
+    for (int i = 0; i < NUM_LEDS; i++) {
+        if (_fade == 0 // how?
+            || millis() > _fade // we've passed the time we're supposed to be fully faded
+            || _leds_new[i] == CRGB(CRGB::Black) // the new color is black, just skip the fade
+            )
+        {
+            leds[i] = _leds_new[i];
         }
+        else {
+			uint8_t amount = 
+				255 // max amount
+				- ((_fade - millis()) / 5000.0) // fraction of time passed
+				* 255;
 
-        // fade black faster
-        if (((int)leds[i]) == CRGB::Black) {
-            if (amount >= 128) {
-                amount = 255;
-            }
-            amount *= 2;
+			leds[i] = blend(_leds_previous[i], _leds_new[i], amount);
         }
-
-        leds[i] = blend(_leds_previous[i], _leds_new[i], amount);
     }
+}
+
+void Clock::drawTime(
+    CRGB* leds,
+    uint8_t hour,
+    uint8_t minute)
+{
+    fill_solid(leds, NUM_LEDS, CRGB::Black);
+
+	uint16_t offset = 60 * hour + minute;
+
+    _font.drawDigit(leds, hour / 10, 2, offset);
+    _font.drawDigit(leds, hour - (hour / 10) * 10, 6, offset);
+    _font.drawSeparator(leds, 10, offset);
+    _font.drawDigit(leds, minute / 10, 12, offset);
+    _font.drawDigit(leds, minute - (minute / 10) * 10, 16, offset);
 }
 
 

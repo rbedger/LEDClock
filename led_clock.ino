@@ -1,7 +1,6 @@
-#define FASTLED_ALLOW_INTERRUPTS 0
+// #define FASTLED_ALLOW_INTERRUPTS 0
 
 #include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
 #include <FastLED.h>
 
 #include "prog.h"
@@ -19,7 +18,8 @@
 Ntp _ntp;
 Ledutils _ledutils(MatrixWidth, MatrixHeight);
 Brightness _brightness;
-Clock _clock(NUM_LEDS, _ntp, _ledutils, _brightness);
+Font _font(RainbowColors_p, _ledutils, _brightness);
+Clock _clock(_ntp, _font);
 Modekeeper _modekeeper(Modekeeper::Mode::CLOCK);
 Remote _remote(_modekeeper);
 Noise _noise(_ledutils, _brightness);
@@ -51,22 +51,12 @@ void setup()
 	Serial.println(WiFi.localIP());
 
 	_ntp.connect();
-	_remote.setup();
+	// _remote.setup();
 
 	FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(_leds, NUM_LEDS)
 		.setCorrection(TypicalLEDStrip)
 		.setDither(false);
 	FastLED.setBrightness(DEFAULT_BRIGHTNESS);
-
-	FastLED.clear(true);
-
-	CRGB* ptr = _leds;
-	ptr = ptr + 21 * 2;
-
-	fill_solid(ptr, 21, CRGB::SeaGreen);
-	FastLED.show();
-
-	delay(2000);
 }
 
 
@@ -81,7 +71,7 @@ void loop()
 	_ntp.handleTime();
 
 	_brightness.handle();
-	_remote.handle();
+	// _remote.handle();
 
 	int currentHour = hour(_ntp.getLocalTime());
 	if (currentHour > 22 || currentHour < 8) {
@@ -92,6 +82,11 @@ void loop()
 	switch (_modekeeper.getMode())
 	{
 	case Modekeeper::Mode::CLOCK:
+		if (!_ntp.isTimeSet()) {
+			// don't update any LEDs if the time isn't set.
+			// this is especially nice if we are recovering from a crash.
+			return;
+		}
 		_clock.handle(_leds);
 		break;
 	case Modekeeper::Mode::SINGLECOLOR:
@@ -113,7 +108,7 @@ void loop()
 	SERIAL_PRINT("NTP last sync: ");
 	SERIAL_PRINTLN(_ntp.ntpLastSyncTime);
 
-#ifdef DEBUG
+#ifdef DEBUG_DELAY
 	delay(1000);
 #endif
 }

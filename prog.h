@@ -3,7 +3,7 @@
 
 #include <WiFiUdp.h>
 
-#define WLED_CONNECTED (WiFi.status() == WL_CONNECTED)
+#define WIFI_CONNECTED (WiFi.status() == WL_CONNECTED)
 
 #define DATA_PIN D3
 #define BUTTON_PIN D7
@@ -16,7 +16,8 @@ const uint8_t MatrixHeight = 5;
 #define MAX_DIMENSION ((MatrixWidth>MatrixHeight) ? MatrixWidth : MatrixHeight)
 #define NUM_LEDS (MatrixWidth * MatrixHeight)
 
-// #define DEBUG
+#define DEBUG
+// #define DEBUG_DELAY
 
 #ifdef DEBUG
 	#define SERIAL_PRINT(x) Serial.print(x)

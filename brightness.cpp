@@ -35,7 +35,5 @@ void Brightness::handle() {
 
 uint8_t Brightness::getBrightness() { return _brightness; }
 
-unsigned int Brightness::getLatestAdcValue() { return _latest_adc; }
-
 bool Brightness::saturated() { return _latest_adc >= 750; }
 

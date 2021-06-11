@@ -1,15 +1,24 @@
 #include "font.h"
 
-Font::Font(CRGBPalette16 palette, Ledutils& ledutils) : _palette(palette), _ledutils(ledutils) {}
+Font::Font(
+    CRGBPalette16 palette,
+    Ledutils& ledutils,
+    Brightness& brightness)
+:
+    _palette(palette),
+    _ledutils(ledutils),
+	_brightness(brightness)
+{
+}
 
 void Font::setPixel(CRGB* leds, uint8_t x, uint8_t y, bool on, uint16_t pallette_offset) {
     uint16_t xy = _ledutils.XY(x, y);
     if (on) {
-        if (_white_instead_of_palette) {
+        if (_brightness.saturated()) {
             leds[xy] = CRGB::White;
         }
         else {
-            leds[xy] = ColorFromPalette(_palette, xy + pallette_offset, _brightness, NOBLEND);
+            leds[xy] = ColorFromPalette(_palette, xy + pallette_offset, _brightness.getBrightness(), NOBLEND);
         }
     }
     else {
@@ -30,8 +39,4 @@ void Font::drawSeparator(CRGB* leds, uint8_t x_offset, uint16_t pallette_offset)
         setPixel(leds, x_offset, y, separator[5 - y - 1], pallette_offset);
     }
 }
-
-void Font::setBrightness(uint8_t brightness) { _brightness = brightness; }
-
-void Font::useFullWhiteInsteadOfPalette(bool use_white) { _white_instead_of_palette = use_white; }
 

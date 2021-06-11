@@ -13,7 +13,6 @@ class Brightness {
 	public:
 		void handle();
 		uint8_t getBrightness();
-		unsigned int getLatestAdcValue();
 		bool saturated();
 
 	private:

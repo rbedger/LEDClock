@@ -8,16 +8,17 @@
 
 class Clock {
 	public:
-		Clock(uint16_t num_leds, Ntp& ntp, Ledutils &ledutils, Brightness &brightness);
+		Clock(Ntp& ntp, Font& font);
+
 		void handle(CRGB* leds);
 
 	private:
-		void setPixel(CRGB *leds, uint8_t x, uint8_t y, bool on);
-		void drawDigit(CRGB *leds, uint8_t digit, uint8_t x_offset);
-		void drawSeparator(CRGB *leds, uint8_t x_offset);
+		void drawTime(
+			CRGB* leds,
+			uint8_t hour,
+			uint8_t minute);
 
 	private:
-		uint16_t _num_leds;
 		int8_t _prev_day = 0;
 		int8_t _prev_hour = 0;
 		int8_t _prev_minute = 0;
@@ -26,7 +27,6 @@ class Clock {
 		CRGB *_leds_new;
 		Ntp &_ntp;
 		Font _font;
-		Brightness& _brightness;
 };
 
 #endif

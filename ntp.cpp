@@ -29,25 +29,16 @@ bool Ntp::isTimeSet() {
 }
 
 void Ntp::handleTime() {
-  handleNetworkTime();
 
   toki.millisecond();
   toki.setTick();
 
   if (toki.isTick()) //true only in the first loop after a new second started
   {
-    SERIAL_PRINT(F("TICK! "));
-#ifdef DEBUG
-    toki.printTime(toki.getTime());
-#endif
-
-    updateLocalTime();
+      updateLocalTime();
   }
-}
 
-void Ntp::handleNetworkTime()
-{
-  if (ntpConnected && millis() - ntpLastSyncTime > (1000*NTP_SYNC_INTERVAL) && WLED_CONNECTED)
+  if (ntpConnected && millis() - ntpLastSyncTime > (1000*NTP_SYNC_INTERVAL) && WIFI_CONNECTED)
   {
     if (millis() - ntpPacketSentTime > 10000)
     {
@@ -89,13 +80,13 @@ void Ntp::sendNTPPacket()
 
 bool Ntp::checkNTPResponse()
 {
-  int cb = ntpUdp.parsePacket();
-  if (!cb) return false;
+  int packetSize = ntpUdp.parsePacket();
+  if (!packetSize) return false;
 
   uint32_t ntpPacketReceivedTime = millis();
 
   SERIAL_PRINT("NTP recv, 1=");
-  SERIAL_PRINTLN(cb);
+  SERIAL_PRINTLN(packetSize);
 
   byte pbuf[NTP_PACKET_SIZE];
   ntpUdp.read(pbuf, NTP_PACKET_SIZE); // read the packet into the buffer
@@ -134,46 +125,5 @@ bool Ntp::checkNTPResponse()
 
 void Ntp::updateLocalTime()
 {
-  unsigned long tmc = toki.second()+ utcOffsetSecs;
-  localTime = centralTimezone->toLocal(tmc);
+  localTime = centralTimezone->toLocal(toki.second());
 }
-
-void Ntp::getTimeString(char* out)
-{
-  updateLocalTime();
-  byte hr = hour(localTime);
-  if (useAMPM)
-  {
-    if (hr > 11) hr -= 12;
-    if (hr == 0) hr  = 12;
-  }
-  sprintf_P(out,PSTR("%i-%i-%i, %02d:%02d:%02d"),year(localTime), month(localTime), day(localTime), hr, minute(localTime), second(localTime));
-  if (useAMPM)
-  {
-    strcat(out,(hour(localTime) > 11)? " PM":" AM");
-  }
-}
-
-byte Ntp::weekdayMondayFirst()
-{
-  byte wd = weekday(localTime) -1;
-  if (wd == 0) wd = 7;
-  return wd;
-}
-
-
-//time from JSON and HTTP API
-//void setTimeFromAPI(uint32_t timein) {
-//  if (timein == 0 || timein == UINT32_MAX) return;
-//  uint32_t prev = toki.second();
-//  //only apply if more accurate or there is a significant difference to the "more accurate" time source
-//  uint32_t diff = (timein > prev) ? timein - prev : prev - timein;
-//  if (toki.getTimeSource() > TOKI_TS_JSON && diff < 60U) return;
-//
-//  toki.setTime(timein, TOKI_NO_MS_ACCURACY, TOKI_TS_JSON);
-//  if (diff >= 60U) {
-//    updateLocalTime();
-//    calculateSunriseAndSunset();
-//  }
-//  if (presetsModifiedTime == 0) presetsModifiedTime = timein;
-//}

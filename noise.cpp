@@ -22,7 +22,8 @@ void Noise::handle(CRGB* leds) {
             // We use the value at the (i,j) coordinate in the noise
             // array for our brightness, and the flipped value from (j,i)
             // for our pixel's hue.
-            leds[_ledutils.XY(i, j)] = CHSV(_noise[j][i], 255, _noise[i][j]);
+            // leds[_ledutils.XY(i, j)] = CHSV(_noise[j][i], 255, _noise[i][j]);
+            leds[_ledutils.XY(i, j)] = CHSV(_noise[j][i], 255, _brightness.getBrightness());
 
             // You can also explore other ways to constrain the hue used, like below
             // leds[XY(i,j)] = CHSV(ihue + (noise[j][i]>>2),255,noise[i][j]);
