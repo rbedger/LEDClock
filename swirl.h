@@ -16,16 +16,17 @@
 class Swirl {
 public:
 	Swirl(
-		Ledutils& ledutils,
+		LedUtils& ledutils,
 		Brightness& brightness);
-	void handle(CRGB* leds);
+
+	void Handle(CRGB* leds);
 
 private:
-	Ledutils _ledutils;
-	Brightness _brightness;
-	unsigned long _lastExecutionTime;
-	int _count;
-	int _indices[105] = {
+	LedUtils ledUtils;
+	Brightness brightness;
+	unsigned long lastExecutionTime;
+	int count;
+	int indices[105] = {
 		52,
 		53,
 		30,
@@ -132,7 +133,7 @@ private:
 		83,
 		84,
 	};
-	int* _current;
+	int* current;
 };
 
 #endif

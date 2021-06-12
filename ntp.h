@@ -14,18 +14,19 @@ static const uint16_t ntpLocalPort = 2390;
 
 class Ntp {
 	public:
-		void connect();
-		void handleTime();
-		time_t getLocalTime();
-		bool useAMPM = true;
+		void Connect();
+		void HandleTime();
+		time_t GetLocalTime();
+		bool IsTimeSet();
+
 		bool ntpConnected;
 		unsigned long ntpLastSyncTime = 999000000L;
-		bool isTimeSet();
 
 	private:
-		void sendNTPPacket();
-		bool checkNTPResponse();
-		void updateLocalTime();
+		void SendNTPPacket();
+		bool CheckNTPResponse();
+		void UpdateLocalTime();
+
 		bool timeIsSet = false;
 };
 #endif // __NTP_H__

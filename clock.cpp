@@ -3,14 +3,15 @@
 #include "prog.h"
 
 Clock::Clock(Ntp& ntp, Font& font)
-    :   _leds_previous((CRGB*)malloc(sizeof(CRGB)* NUM_LEDS)),
-		_leds_new((CRGB*)malloc(sizeof(CRGB)* NUM_LEDS)),
-		_ntp(ntp),
-		_font(font)
-{}
+    :   ntp(ntp),
+		font(font)
+{
+    ledsPrevious = (CRGB*)malloc(sizeof(CRGB) * NUM_LEDS);
+    ledsNew = (CRGB*)malloc(sizeof(CRGB) * NUM_LEDS);
+}
 
-void Clock::handle(CRGB* leds) {
-    time_t now = _ntp.getLocalTime();
+void Clock::Handle(CRGB* leds) {
+    time_t now = ntp.GetLocalTime();
 
     int hourNow = hour(now);
     int minuteNow = minute(now);
@@ -18,43 +19,43 @@ void Clock::handle(CRGB* leds) {
     SERIAL_PRINT("Now: ");
     SERIAL_PRINTLN(now);
 
-    if (_prev_hour != hourNow || _prev_minute != minuteNow) {
+    if (previousHour != hourNow || previousMinute != minuteNow) {
         // if recovering from a crash, we don't want to fade from "00:00"
-        if (_prev_hour == 0) {
-			drawTime(_leds_previous, hourNow, minuteNow);
+        if (previousHour == 0) {
+			DrawTime(ledsPrevious, hourNow, minuteNow);
         }
         else {
-			drawTime(_leds_previous, _prev_hour, _prev_minute);
+			DrawTime(ledsPrevious, previousHour, previousMinute);
         }
 
-        drawTime(_leds_new, hourNow, minuteNow);
+        DrawTime(ledsNew, hourNow, minuteNow);
 
-        _fade = millis() + 5000;
+        fade = millis() + 5000;
     }
 
-    _prev_hour = hourNow;
-    _prev_minute = minuteNow;
+    previousHour = hourNow;
+    previousMinute = minuteNow;
 
     for (int i = 0; i < NUM_LEDS; i++) {
-        if (_fade == 0 // how?
-            || millis() > _fade // we've passed the time we're supposed to be fully faded
-            || _leds_new[i] == CRGB(CRGB::Black) // the new color is black, just skip the fade
+        if (fade == 0 // how?
+            || millis() > fade // we've passed the time we're supposed to be fully faded
+            || ledsNew[i] == CRGB(CRGB::Black) // the new color is black, just skip the fade
             )
         {
-            leds[i] = _leds_new[i];
+            leds[i] = ledsNew[i];
         }
         else {
 			uint8_t amount = 
 				255 // max amount
-				- ((_fade - millis()) / 5000.0) // fraction of time passed
+				- ((fade - millis()) / 5000.0) // fraction of time passed
 				* 255;
 
-			leds[i] = blend(_leds_previous[i], _leds_new[i], amount);
+			leds[i] = blend(ledsPrevious[i], ledsNew[i], amount);
         }
     }
 }
 
-void Clock::drawTime(
+void Clock::DrawTime(
     CRGB* leds,
     uint8_t hour,
     uint8_t minute)
@@ -63,11 +64,11 @@ void Clock::drawTime(
 
 	uint16_t offset = 60 * hour + minute;
 
-    _font.drawDigit(leds, hour / 10, 2, offset);
-    _font.drawDigit(leds, hour - (hour / 10) * 10, 6, offset);
-    _font.drawSeparator(leds, 10, offset);
-    _font.drawDigit(leds, minute / 10, 12, offset);
-    _font.drawDigit(leds, minute - (minute / 10) * 10, 16, offset);
+    font.DrawDigit(leds, hour / 10, 2, offset);
+    font.DrawDigit(leds, hour - (hour / 10) * 10, 6, offset);
+    font.DrawSeparator(leds, 10, offset);
+    font.DrawDigit(leds, minute / 10, 12, offset);
+    font.DrawDigit(leds, minute - (minute / 10) * 10, 16, offset);
 }
 
 

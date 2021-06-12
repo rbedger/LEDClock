@@ -10,23 +10,22 @@ class Clock {
 	public:
 		Clock(Ntp& ntp, Font& font);
 
-		void handle(CRGB* leds);
+		void Handle(CRGB* leds);
 
 	private:
-		void drawTime(
+		void DrawTime(
 			CRGB* leds,
 			uint8_t hour,
 			uint8_t minute);
 
 	private:
-		int8_t _prev_day = 0;
-		int8_t _prev_hour = 0;
-		int8_t _prev_minute = 0;
-		unsigned long _fade = 0;
-		CRGB *_leds_previous;
-		CRGB *_leds_new;
-		Ntp &_ntp;
-		Font _font;
+		int8_t previousHour = 0;
+		int8_t previousMinute = 0;
+		unsigned long fade = 0;
+		CRGB *ledsPrevious;
+		CRGB *ledsNew;
+		Ntp &ntp;
+		Font font;
 };
 
 #endif

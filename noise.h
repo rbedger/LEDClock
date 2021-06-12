@@ -17,25 +17,26 @@
 class Noise {
 public:
 	Noise(
-		Ledutils &ledutils,
+		LedUtils &ledUtils,
 		Brightness &brightness);
-	void handle(CRGB* leds);
+
+	void Handle(CRGB* leds);
 
 private:
-	Ledutils _ledutils;
-	Brightness _brightness;
+	LedUtils ledUtils;
+	Brightness brightness;
 	// The 32bit version of our coordinates
-	uint16_t _x;
-	uint16_t _y;
-	uint16_t _z;
-	void fillnoise8();
+	uint16_t x;
+	uint16_t y;
+	uint16_t z;
+	void FillNoise8();
 
 	// We're using the x/y dimensions to map to the x/y pixels on the matrix.  We'll
 	// use the z-axis for "time".  speed determines how fast time moves forward.  Try
 	// 1 for a very slow moving effect, or 60 for something that ends up looking like
 	// water.
 	// uint16_t speed = 1; // almost looks like a painting, moves very slowly
-	uint16_t _speed = 20; // a nice starting speed, mixes well with a scale of 100
+	uint16_t speed = 20; // a nice starting speed, mixes well with a scale of 100
 	// uint16_t speed = 33;
 	// uint16_t speed = 100; // wicked fast!
 
@@ -46,10 +47,10 @@ private:
 
 	// uint16_t scale = 1; // mostly just solid colors
 	// uint16_t scale = 4011; // very zoomed out and shimmery
-	uint16_t _scale = 311;
+	uint16_t scale = 311;
 
 	// This is the array that we keep our computed noise values in
-	uint8_t _noise[MAX_DIMENSION][MAX_DIMENSION];
+	uint8_t noise[MAX_DIMENSION][MAX_DIMENSION];
 };
 
 #endif

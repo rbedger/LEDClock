@@ -3,29 +3,29 @@
 #include <math.h>
 
 Swirl::Swirl(
-	Ledutils& ledutils,
+	LedUtils& ledutils,
 	Brightness& brightness)
-:	_ledutils(ledutils),
-	_brightness(brightness)
+:	ledUtils(ledutils),
+	brightness(brightness)
 {
 	int centerX = round(MatrixWidth / 2.0);
 	int centerY = round(MatrixHeight / 2.0);
 
-	_current = _indices;
-	_count = 1;
+	current = indices;
+	count = 1;
 }
 
-void Swirl::handle(CRGB* leds)
+void Swirl::Handle(CRGB* leds)
 {
-	if (millis() - _lastExecutionTime > 100) {
-		leds[*_current] = CHSV(random8(), 255, _brightness.getBrightness());
-		if (++_count > NUM_LEDS) {
-			_count = 1;
-			_current = _indices;
+	if (millis() - lastExecutionTime > 100) {
+		leds[*current] = CHSV(random8(), 255, brightness.GetBrightness());
+		if (++count > NUM_LEDS) {
+			count = 1;
+			current = indices;
 		}
 		else {
-			_current++;
+			current++;
 		}
-		_lastExecutionTime = millis();
+		lastExecutionTime = millis();
 	}
 }

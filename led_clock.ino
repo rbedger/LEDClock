@@ -16,11 +16,11 @@
 #include "swirl.h"
 
 Ntp _ntp;
-Ledutils _ledutils(MatrixWidth, MatrixHeight);
+LedUtils _ledutils;
 Brightness _brightness;
 Font _font(RainbowColors_p, _ledutils, _brightness);
 Clock _clock(_ntp, _font);
-Modekeeper _modekeeper(Modekeeper::Mode::CLOCK);
+Modekeeper _modekeeper(Modekeeper::Mode::Clock);
 Remote _remote(_modekeeper);
 Noise _noise(_ledutils, _brightness);
 SingleColor _singleColor(_brightness);
@@ -50,7 +50,7 @@ void setup()
 	Serial.print("IP address: ");
 	Serial.println(WiFi.localIP());
 
-	_ntp.connect();
+	_ntp.Connect();
 	// _remote.setup();
 
 	FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(_leds, NUM_LEDS)
@@ -64,39 +64,39 @@ void loop()
 {
 	int currentButtonState = digitalRead(BUTTON_PIN);
 	if (currentButtonState == HIGH && _last_button_state == LOW) {
-		_modekeeper.nextMode();
+		_modekeeper.NextMode();
 	}
 	_last_button_state = currentButtonState;
 
-	_ntp.handleTime();
+	_ntp.HandleTime();
 
-	_brightness.handle();
+	_brightness.Handle();
 	// _remote.handle();
 
-	int currentHour = hour(_ntp.getLocalTime());
+	int currentHour = hour(_ntp.GetLocalTime());
 	if (currentHour > 22 || currentHour < 8) {
 		FastLED.clear(true);
 		return;
 	}
 
-	switch (_modekeeper.getMode())
+	switch (_modekeeper.GetMode())
 	{
-	case Modekeeper::Mode::CLOCK:
-		if (!_ntp.isTimeSet()) {
+	case Modekeeper::Mode::Clock:
+		if (!_ntp.IsTimeSet()) {
 			// don't update any LEDs if the time isn't set.
 			// this is especially nice if we are recovering from a crash.
 			return;
 		}
-		_clock.handle(_leds);
+		_clock.Handle(_leds);
 		break;
-	case Modekeeper::Mode::SINGLECOLOR:
-		_singleColor.handle(_leds);
+	case Modekeeper::Mode::SingleColor:
+		_singleColor.Handle(_leds);
 		break;
-	case Modekeeper::Mode::NOISE:
-		_noise.handle(_leds);
+	case Modekeeper::Mode::Noise:
+		_noise.Handle(_leds);
 		break;
-	case Modekeeper::Mode::SWIRL:
-		_swirl.handle(_leds);
+	case Modekeeper::Mode::Swirl:
+		_swirl.Handle(_leds);
 		break;
 	}
 

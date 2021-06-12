@@ -1,24 +1,17 @@
 #include "modekeeper.h"
 
-Modekeeper::Modekeeper(Mode default_mode) : _default_mode(default_mode), _current_mode(default_mode) {}
+Modekeeper::Modekeeper(Mode defaultMode) : defaultMode(defaultMode), currentMode(defaultMode) {}
 
-void Modekeeper::setMode(Mode mode) {
-    _current_mode = mode;
+void Modekeeper::SetMode(Mode mode) {
+    currentMode = mode;
 }
 
-void Modekeeper::stamp() { _last_stamp = millis() + ONE_MINUTE_MS; }
-
-Modekeeper::Mode Modekeeper::getMode() {
-    if (_last_stamp != 0 && millis() > _last_stamp) {
-        _current_mode = _default_mode;
-        _last_stamp = 0;
-    }
-
-    return _current_mode;
+Modekeeper::Mode Modekeeper::GetMode() {
+    return currentMode;
 }
 
-void Modekeeper::nextMode() {
-    int nextModeInt = ((int)_current_mode) + 1;
+void Modekeeper::NextMode() {
+    int nextModeInt = ((int)currentMode) + 1;
     nextModeInt %= 4;
-    _current_mode = (Mode)nextModeInt;
+    currentMode = (Mode)nextModeInt;
 }

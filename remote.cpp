@@ -1,75 +1,74 @@
 #include "remote.h"
 Remote::Remote(
 		Modekeeper& modekeeper)
-    :   _web_server(80),
-		_modekeeper(modekeeper)
+    :   webServer(80),
+		modekeeper(modekeeper)
 {
 }
 
-void Remote::setup() {
-    _ws_server.listen(8080);
+void Remote::Setup() {
+    websocketServer.listen(8080);
 
     SPIFFS.begin();
 
-    _web_server.onNotFound([this]() {
-        if (!Remote::handleFileRead(_web_server.uri())) {
-            _web_server.send(404, "text/plain", "404: Not Found");
+    webServer.onNotFound([this]() {
+        if (!Remote::HandleFileRead(webServer.uri())) {
+            webServer.send(404, "text/plain", "404: Not Found");
         }
         });
 
-    _web_server.begin();
+    webServer.begin();
 }
 
-bool Remote::handleFileRead(String path) {
+bool Remote::HandleFileRead(String path) {
     if (path.endsWith("/")) {
         path += "index.htm";
     }
     String contentType = "text/html";
     if (SPIFFS.exists(path)) {
         File file = SPIFFS.open(path, "r");
-        size_t sent = _web_server.streamFile(file, contentType);
+        size_t sent = webServer.streamFile(file, contentType);
         file.close();
         return true;
     }
     return false;
 }
 
-void Remote::handleData(int8_t c) {
-    _modekeeper.stamp();
+void Remote::HandleData(int8_t c) {
     switch (c) {
     case '1':
-        _modekeeper.setMode(Modekeeper::Mode::CLOCK);
+        modekeeper.SetMode(Modekeeper::Mode::Clock);
         break;
     case '2':
-        _modekeeper.setMode(Modekeeper::Mode::SINGLECOLOR);
+        modekeeper.SetMode(Modekeeper::Mode::SingleColor);
         break;
     case '3':
-        _modekeeper.setMode(Modekeeper::Mode::NOISE);
+        modekeeper.SetMode(Modekeeper::Mode::Noise);
         break;
     }
 }
 
-void Remote::onMessage(WebsocketsClient& client, WebsocketsMessage& message) {
-    handleData(message.rawData()[0]);
+void Remote::OnMessage(WebsocketsClient& client, WebsocketsMessage& message) {
+    HandleData(message.rawData()[0]);
     client.send("Echo: " + message.data());
 }
 
-void Remote::pollAllWsClients() {
-    for (auto& client : _ws_clients) {
+void Remote::PollAllWsClients() {
+    for (auto& client : websocketClients) {
         client.poll();
     }
 }
 
-void Remote::handle() {
+void Remote::Handle() {
     // Websocket
-    if (_ws_server.poll()) {
-        auto ws_client = _ws_server.accept();
-        ws_client.onMessage([this](WebsocketsClient& client, WebsocketsMessage message) { onMessage(client, message); });
-        _ws_clients.push_back(ws_client);
+    if (websocketServer.poll()) {
+        auto ws_client = websocketServer.accept();
+        ws_client.onMessage([this](WebsocketsClient& client, WebsocketsMessage message) { OnMessage(client, message); });
+        websocketClients.push_back(ws_client);
     }
 
-    pollAllWsClients();
+    PollAllWsClients();
 
-    _web_server.handleClient();
+    webServer.handleClient();
 }
 

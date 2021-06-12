@@ -14,25 +14,25 @@ using namespace websockets;
 class Remote {
 public:
 	Remote(Modekeeper& modekeeper);
-	void setup();
-	void handle();
+	void Setup();
+	void Handle();
 
 private:
-	void handleData(int8_t c);
-	void onMessage(WebsocketsClient& client, WebsocketsMessage& message);
-	void pollAllWsClients();
-	bool handleFileRead(String path);
+	void HandleData(int8_t c);
+	void OnMessage(WebsocketsClient& client, WebsocketsMessage& message);
+	void PollAllWsClients();
+	bool HandleFileRead(String path);
 
 private:
-	WebsocketsServer _ws_server;
-	std::vector<WebsocketsClient> _ws_clients;
+	WebsocketsServer websocketServer;
+	std::vector<WebsocketsClient> websocketClients;
 
-	ESP8266WebServer _web_server;
+	ESP8266WebServer webServer;
 
-	WiFiClient _wifi_client;
-	unsigned long _retry_to_connect_at_ms = 0;
+	WiFiClient wifiClient;
+	unsigned long retryToConnectAtMS = 0;
 
-	Modekeeper& _modekeeper;
+	Modekeeper& modekeeper;
 };
 
 #endif //__REMOTE_H__

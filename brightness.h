@@ -11,16 +11,17 @@
 
 class Brightness {
 	public:
-		void handle();
-		uint8_t getBrightness();
-		bool saturated();
+		void Handle();
+		uint8_t GetBrightness();
+		bool IsSaturated();
+		const int DefaultBrightness = 100;
 
 	private:
-		unsigned int readAdc();
+		unsigned int ReadADC();
 
 	private:
-		uint8_t _brightness = 100;
-		unsigned int _latest_adc;
+		uint8_t currentBrightness = DefaultBrightness;
+		unsigned int latestADCValue;
 };
 
 #endif

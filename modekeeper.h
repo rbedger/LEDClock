@@ -8,22 +8,20 @@
 class Modekeeper {
 public:
     enum class Mode {
-        CLOCK,
-        SINGLECOLOR,
-        NOISE,
-        SWIRL,
+        Clock,
+        SingleColor,
+        Noise,
+        Swirl,
     };
 
-    Modekeeper(Mode default_mode);
-    void setMode(Mode mode);
-    void nextMode();
-    void stamp();
-    Mode getMode();
+    Modekeeper(Mode defaultMode);
+    void SetMode(Mode mode);
+    void NextMode();
+    Mode GetMode();
 
 private:
-    Mode _default_mode;
-    Mode _current_mode;
-    unsigned long _last_stamp = 0;
+    Mode defaultMode;
+    Mode currentMode;
 };
 
 #endif //__MODEKEEPER_H__

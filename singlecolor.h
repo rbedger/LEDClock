@@ -20,11 +20,11 @@ public:
 		Brightness& brightness
 	);
 
-	void handle(CRGB* leds);
+	void Handle(CRGB* leds);
 
 private:
-	Brightness _brightness;
-	unsigned long _lastColorChange;
+	Brightness brightness;
+	unsigned long lastColorChange;
 };
 
 #endif

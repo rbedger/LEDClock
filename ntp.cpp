@@ -15,44 +15,44 @@ Timezone* centralTimezone = new Timezone(daylight, standard);
 
 WiFiUDP ntpUdp;
 
-void Ntp::connect() {
+void Ntp::Connect() {
 	ntpConnected = ntpUdp.begin(ntpLocalPort);
 }
 
-time_t Ntp::getLocalTime()
+time_t Ntp::GetLocalTime()
 {
     return localTime;
 }
 
-bool Ntp::isTimeSet() {
+bool Ntp::IsTimeSet() {
     return timeIsSet;
 }
 
-void Ntp::handleTime() {
+void Ntp::HandleTime() {
 
   toki.millisecond();
   toki.setTick();
 
   if (toki.isTick()) //true only in the first loop after a new second started
   {
-      updateLocalTime();
+      UpdateLocalTime();
   }
 
   if (ntpConnected && millis() - ntpLastSyncTime > (1000*NTP_SYNC_INTERVAL) && WIFI_CONNECTED)
   {
     if (millis() - ntpPacketSentTime > 10000)
     {
-      sendNTPPacket();
+      SendNTPPacket();
       ntpPacketSentTime = millis();
     }
-    if (checkNTPResponse())
+    if (CheckNTPResponse())
     {
       ntpLastSyncTime = millis();
     }
   }
 }
 
-void Ntp::sendNTPPacket()
+void Ntp::SendNTPPacket()
 {
   if (!ntpServerIP.fromString(ntpServerName)) //see if server is IP or domain
   {
@@ -78,7 +78,7 @@ void Ntp::sendNTPPacket()
   ntpUdp.endPacket();
 }
 
-bool Ntp::checkNTPResponse()
+bool Ntp::CheckNTPResponse()
 {
   int packetSize = ntpUdp.parsePacket();
   if (!packetSize) return false;
@@ -118,12 +118,12 @@ bool Ntp::checkNTPResponse()
   SERIAL_PRINTLN(serverDelay);
   #endif
 
-  updateLocalTime();
+  UpdateLocalTime();
   timeIsSet = true;
   return true;
 }
 
-void Ntp::updateLocalTime()
+void Ntp::UpdateLocalTime()
 {
   localTime = centralTimezone->toLocal(toki.second());
 }
